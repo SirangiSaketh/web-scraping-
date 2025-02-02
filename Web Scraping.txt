@@ -1,0 +1,63 @@
+import numpy as np
+import pandas as pd
+
+import requests
+from bs4 import BeautifulSoup
+     
+
+URL = 'https://timely-sunshine-e821b3.netlify.app/'
+
+     
+
+page = requests.get(URL)
+     
+
+page.status_code
+
+     
+
+htmlcode = page.text
+soup = BeautifulSoup(htmlcode)
+     
+
+htmlcode
+
+
+
+content = soup.find('div', attrs = {'class':'main'})
+text = content.text.strip()
+r1 = text.split('\n')
+
+r2 =[]
+for i in r1:
+  if i != '':
+    r2.append(i)
+r3 = []
+for i in r2:
+  r3.append(i.strip())
+
+r4 = []
+for i in r3:
+  if i!= '':
+    r4.append(i)
+#print(r4)
+names = []
+prices = []
+for i in range(0,len(r4),2):
+  names.append(r4[i])
+  prices.append(r4[i+1])
+print(names)
+print(prices)
+
+df = pd.DataFrame({'product_name':names, 'price':prices})
+     
+
+df
+     
+
+df.to_csv('sample.csv')
+     
+
+from google.colab import files
+files.download('sample.csv')
+     
